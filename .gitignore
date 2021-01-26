@@ -1,0 +1,12 @@
+build
+out
+.idea
+.gradle
+gradle.properties
+credentials.json
+chromedriver.exe
+forms.properties
+log
+\data
+\tokens
+\temp
