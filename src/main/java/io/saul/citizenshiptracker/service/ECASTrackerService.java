@@ -13,7 +13,7 @@ import java.util.Properties;
 @Service
 public class ECASTrackerService {
 
-    private Properties formInputs;
+    private final Properties formInputs;
 
     public ECASTrackerService(){
         formInputs = new Properties();
