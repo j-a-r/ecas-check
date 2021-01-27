@@ -1,5 +1,6 @@
 package io.saul.citizenshiptracker.service;
 
+import io.saul.citizenshiptracker.service.notification.GMailNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,16 +8,20 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import java.io.IOException;
 
 @Service
 public class SchedulerService {
 
     private final ECASTrackerService ecasTrackerService;
+    private final GMailNotificationService gMailNotificationService;
     private final static Logger log = LoggerFactory.getLogger(SchedulerService.class);
 
     @Autowired
-    public SchedulerService(ECASTrackerService ecasTrackerService) {
+    public SchedulerService(ECASTrackerService ecasTrackerService, GMailNotificationService gMailNotificationService) {
         this.ecasTrackerService = ecasTrackerService;
+        this.gMailNotificationService = gMailNotificationService;
     }
 
     @PostConstruct
@@ -25,10 +30,19 @@ public class SchedulerService {
         String resultingURL = ecasTrackerService.fire();
         if(resultingURL == null) {
             log.info("No updates.");
+            try {
+                gMailNotificationService.send("martin@saul.io", "Nope :(", "Fission mailed");
+            } catch (IOException | MessagingException e) {
+                log.error("Failed to send email due to exception.", e);
+            }
         }
         else{
             log.info("DIFFERENT URL RECEIVED: " + resultingURL);
-            System.exit(0);
+            try {
+                gMailNotificationService.send("martin@saul.io", "ｷﾀ━━━━ヽ(ﾟ∀ﾟ )ﾉ━━━━!!!", "ヽ(∀ﾟ )人(ﾟ∀ﾟ)人( ﾟ∀)ノ\nGot: " + resultingURL);
+            } catch (IOException | MessagingException e) {
+                log.error("Failed to send email due to exception.", e);
+            }
         }
     }
 }
