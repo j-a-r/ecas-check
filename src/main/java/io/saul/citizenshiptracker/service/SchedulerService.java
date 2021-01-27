@@ -34,7 +34,7 @@ public class SchedulerService {
         if(resultingURL == null) {
             log.info("No updates.");
             try {
-                gMailNotificationService.send("martin@saul.io", "Nope :(", "Fission mailed");
+                gMailNotificationService.send(destination, "Nope :(", "Fission mailed");
             } catch (IOException | MessagingException e) {
                 log.error("Failed to send email due to exception.", e);
             }
@@ -42,7 +42,7 @@ public class SchedulerService {
         else{
             log.info("DIFFERENT URL RECEIVED: " + resultingURL);
             try {
-                gMailNotificationService.send("martin@saul.io", "ｷﾀ━━━━ヽ(ﾟ∀ﾟ )ﾉ━━━━!!!", "ヽ(∀ﾟ )人(ﾟ∀ﾟ)人( ﾟ∀)ノ\nGot: " + resultingURL);
+                gMailNotificationService.send(destination, "ｷﾀ━━━━ヽ(ﾟ∀ﾟ )ﾉ━━━━!!!", "ヽ(∀ﾟ )人(ﾟ∀ﾟ)人( ﾟ∀)ノ\nGot: " + resultingURL);
             } catch (IOException | MessagingException e) {
                 log.error("Failed to send email due to exception.", e);
             }
