@@ -4,6 +4,7 @@ import io.saul.citizenshiptracker.service.notification.GMailNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,13 @@ public class SchedulerService {
     private final ECASTrackerService ecasTrackerService;
     private final GMailNotificationService gMailNotificationService;
     private final static Logger log = LoggerFactory.getLogger(SchedulerService.class);
+    private final String destination;
 
     @Autowired
-    public SchedulerService(ECASTrackerService ecasTrackerService, GMailNotificationService gMailNotificationService) {
+    public SchedulerService(ECASTrackerService ecasTrackerService, GMailNotificationService gMailNotificationService, @Value("${gmail.sender}")String destination) {
         this.ecasTrackerService = ecasTrackerService;
         this.gMailNotificationService = gMailNotificationService;
+        this.destination = destination;
     }
 
     @PostConstruct
