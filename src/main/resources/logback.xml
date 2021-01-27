@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress XmlUnboundNsPrefix -->
+<configuration scan="true">
+    <property name="LOG_DIR" value="./log/sm" />
+    <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <Pattern>${PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FULL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_DIR}/output.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <FileNamePattern>${LOG_DIR}/compressed/output/file.%d{yyyy-MM-dd}.%i.log.gz
+            </FileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <MaxHistory>30</MaxHistory>
+            <!-- or whenever the file size reaches 10MB -->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CORE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_DIR}/core.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <FileNamePattern>${LOG_DIR}/compressed/core/file.%d{yyyy-MM-dd}.%i.log.gz
+            </FileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <MaxHistory>30</MaxHistory>
+            <!-- or whenever the file size reaches 10MB -->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="io.saul.misc.citizenshiptracker" level="DEBUG">
+        <appender-ref ref="CORE"/>
+    </logger>
+
+    <logger name="org.springframework" level="WARN">
+        <appender-ref ref="CORE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="FULL"/>
+        <appender-ref ref="consoleAppender" />
+    </root>
+</configuration>
